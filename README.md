@@ -11,6 +11,15 @@ Should create the required images and install all necessary parts.
 * latest version of `colorspace`
 * latest colorspace shiny apps
 
+# Testing
+
+```
+docker-compose up
+```
+
+You should then be able to access `http://localhost:3000` to see
+the apps.
+
 # Start
 
 ```
