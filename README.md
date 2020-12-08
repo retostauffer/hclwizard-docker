@@ -3,6 +3,10 @@
 
 # Setting up
 
+**Important:** `shiny-server.sh` must be executable. 
+
+* `chmod u+x shiny-server.sh`
+
 Install docker and docker composer, then run `docker-compose build`.
 Should create the required images and install all necessary parts.
 

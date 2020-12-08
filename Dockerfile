@@ -14,7 +14,6 @@ RUN apt-get update && apt-get install -y \
     subversion \
     wget
 
-
 # Download and install shiny server
 RUN wget --no-verbose https://download3.rstudio.org/ubuntu-14.04/x86_64/VERSION -O "version.txt" && \
     VERSION=$(cat version.txt)  && \
@@ -25,15 +24,11 @@ RUN wget --no-verbose https://download3.rstudio.org/ubuntu-14.04/x86_64/VERSION 
     R -e "install.packages(c('shinyjs', 'shiny', 'rmarkdown'))" && \
     R -e "install.packages(c('png', 'jpeg', 'RCurl'))" && \
     cp -R /usr/local/lib/R/site-library/shiny/examples/* /srv/shiny-server/ && \
-    chown shiny:shiny /var/lib/shiny-server
-
-# Install latest colorspace version from r-forge
-RUN cd /tmp && \
+    chown shiny:shiny /var/lib/shiny-server && \
+    cd /tmp && \
     svn checkout svn://r-forge.r-project.org/svnroot/colorspace/pkg/colorspace && \
     R CMD INSTALL colorspace && \
-    rm -rf /srv/shiny-server/* && \
-    cp -r colorspace/inst/* /srv/shiny-server/
-#RUN ls -l /srv/shiny-server
+    cp -r /tmp/colorspace/inst/* /srv/shiny-server/
 
 
 EXPOSE 3838
