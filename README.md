@@ -29,3 +29,21 @@ the apps.
 ```
 docker-compose -f docker-compose.yml -f production.yml up -d
 ```
+
+# Autostart
+
+Makre sure you enabled the docker service on startup
+(`systemctl enable docker`). Create a new service
+called `hclwizard.service` by creating the file
+`/usr/lib/systemd/system/hclwizard.service` containing:
+
+```
+[Unit]
+Description=HCLWizard Docker Shiny Service
+After=syslog.target network.target docker.service
+
+[Service]
+ExecStart=docker run --restart=always hclwizard-docker_shiny
+```
+
+Should do the trick.
