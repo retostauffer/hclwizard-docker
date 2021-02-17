@@ -28,7 +28,8 @@ RUN wget --no-verbose https://download3.rstudio.org/ubuntu-14.04/x86_64/VERSION 
     cd /tmp && \
     svn checkout svn://r-forge.r-project.org/svnroot/colorspace/pkg/colorspace && \
     R CMD INSTALL colorspace && \
-    cp -r /tmp/colorspace/inst/* /srv/shiny-server/
+    cp -r /tmp/colorspace/inst/* /srv/shiny-server/ && \
+    rm -rf /tmp/colorspace
 
 
 EXPOSE 3838

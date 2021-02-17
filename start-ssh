@@ -2,7 +2,7 @@
 
 set -u
 
-container_name="shiny_shiny"
+container_name="hclwizard-docker_shiny"
 
 n=`docker ps | egrep "${container_name}" | wc -l`
 if [ $n -eq 0 ] ; then

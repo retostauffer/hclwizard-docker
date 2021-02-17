@@ -24,7 +24,10 @@ docker-compose up
 You should then be able to access `http://localhost:3000` to see
 the apps.
 
-# Start
+# Build
+
+Uses `production.yml` to build the container; this is then the one
+used in the service.
 
 ```
 docker-compose -f docker-compose.yml -f production.yml up -d
@@ -32,7 +35,7 @@ docker-compose -f docker-compose.yml -f production.yml up -d
 
 # Autostart
 
-Makre sure you enabled the docker service on startup
+Make sure you enabled the docker service on startup
 (`systemctl enable docker`). Create a new service
 called `hclwizard.service` by creating the file
 `/usr/lib/systemd/system/hclwizard.service` containing:
