@@ -1,71 +1,49 @@
 
 
 
-# Setting up
-
-**Important:** `shiny-server.sh` must be executable. 
-
-* `chmod u+x shiny-server.sh`
-
-Install docker and docker composer, then run `docker-compose build`.
-Should create the required images and install all necessary parts.
-
-* shiny server ([rocker/shiny](https://hub.docker.com/r/rocker/shiny))
-* a series of R packages
-* latest version of `colorspace`
-* latest colorspace shiny apps
-
-# Testing
+# Building container (also locally)
 
 ```
-docker-compose up
+docker-compose build
+# Alternative:
+#    make build
 ```
 
-You should then be able to access `http://localhost:3000` to see
+# Run container locally
+
+After building, simply run:
+
+```
+make run
+```
+
+You should then be able to access `http://localhost:3838` to see
 the apps.
 
-# Build
+# Shell access
+
+There is a bash script called login-to-bash to get a live bash shell
+of a _running_ container. After building and starting the container,
+simply call
+
+```
+/bin/bash login-to-bash
+# Alternative:
+#   make bash
+```
+
+# Production build
 
 Uses `production.yml` to build the container; this is then the one
 used in the service.
 
 ```
 docker-compose -f docker-compose.yml -f production.yml up -d
+# Alternative:
+#    make prodbuild
 ```
 
-# Autostart
-
-Make sure you enabled the docker service on startup
-(`systemctl enable docker`). Create a new service
-called `hclwizard.service` by creating the file
-`/usr/lib/systemd/system/hclwizard.service` containing:
-
-```
-[Unit]
-Description=HCLWizard Docker Shiny Service
-After=syslog.target network.target docker.service
-
-[Service]
-ExecStart=docker run --restart=always hclwizard-docker_shiny
-```
-
-Should do the trick.
-
-# Replace the image
-
-In case you make changes to `production.yml` or you want to update
-the R package we need to create a new docker image.
-To do so we have to do the following step:
-
-1. Stop the docker image (service will no longer be available)
-2. Delete the image as we are restricted on disc space; changes in the
-  `.yml` will create a new image while the old one still sticks around.
-3. Build the new container with the new settings. Within the `Dockerfile`
-   you can see that we check out the latest development release
-   from R-Forge and install.
-4. Start the new image (service back online)
-
-These are the steps to do so
+# Old notes
 
 ### (1) Adjustments
 
