@@ -1,7 +1,12 @@
 
+# Updated: 2023-09-28, RS
 
-FROM rocker/r-ver:4.0.2
+# Install dedicated R version with shiny server
+FROM rocker/shiny:4.3.0
 
+LABEL maintainer "Reto Stauffer <reto.stauffer@uibk.ac.at>"
+
+# Installing required packages
 RUN apt-get update && apt-get install -y \
     sudo \
     gdebi-core \
@@ -14,26 +19,24 @@ RUN apt-get update && apt-get install -y \
     subversion \
     wget
 
-# Download and install shiny server
-RUN wget --no-verbose https://download3.rstudio.org/ubuntu-14.04/x86_64/VERSION -O "version.txt" && \
-    VERSION=$(cat version.txt)  && \
-    wget --no-verbose "https://download3.rstudio.org/ubuntu-14.04/x86_64/shiny-server-$VERSION-amd64.deb" -O ss-latest.deb && \
-    gdebi -n ss-latest.deb && \
-    rm -f version.txt ss-latest.deb && \
-    . /etc/environment && \
-    R -e "install.packages(c('shinyjs', 'shiny', 'rmarkdown'))" && \
+# (1) Install required packages
+# (2) Switch to /tmp folder and clone the current version of colorspace
+# (3) Install the colorspace package
+# (4) Empty the /srv/shiny-server/ folder; removing demo apps
+# (5) Move colorspace shiny apps (from inst folder) to the exposed shiny-server folder
+# (6) Cleaning up
+RUN R -e "install.packages(c('shinyjs', 'shiny', 'rmarkdown'))" && \
     R -e "install.packages(c('png', 'jpeg', 'RCurl'))" && \
-    cp -R /usr/local/lib/R/site-library/shiny/examples/* /srv/shiny-server/ && \
-    chown shiny:shiny /var/lib/shiny-server && \
     cd /tmp && \
     svn checkout svn://r-forge.r-project.org/svnroot/colorspace/pkg/colorspace && \
     R CMD INSTALL colorspace && \
+    rm -rf /srv/shiny-server/* && \
     cp -r /tmp/colorspace/inst/* /srv/shiny-server/ && \
     rm -rf /tmp/colorspace
 
-
+# Expose shiny application on port 3838
 EXPOSE 3838
 
-COPY shiny-server.sh /usr/bin/shiny-server.sh
+#COPY shiny-server.sh /usr/bin/shiny-server.sh
 
-CMD ["/usr/bin/shiny-server.sh"]
+CMD ["/usr/bin/shiny-server"]

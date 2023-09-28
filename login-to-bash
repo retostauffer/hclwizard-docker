@@ -1,0 +1,16 @@
+#!/bin/bash
+
+set -u
+
+# Getting container ID if running
+
+dockerid=`docker container ls | egrep "hclwizard-docker_shiny" | awk '{print $1}'`
+
+if [ ${#dockerid} -eq 0 ] ; then
+    print "Cannot find running docker with the expected name"
+    exit 1
+else
+    printf "Connecting to docker container with ID: %s\n" "${dockerid}"
+    docker exec -it ${dockerid} /bin/bash
+fi
+

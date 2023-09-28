@@ -3,7 +3,7 @@ version: "3.5"
 
 services:
     shiny:
-        container_name: shiny
+        container_name: shiny2023
         # To build the image locally, comment out "image" below, and uncomment
         # "build" and the lines indented under it.
         # image: rocker/shiny
