@@ -1,4 +1,29 @@
 
+# Updating
+
+Stop running containers
+
+```
+docker container stop <id>
+```
+
+... and remove them if needed
+
+```
+docker container rm <id>
+```
+
+Same with images. After that, run `make build` and `make prodbuild` to set up the
+container based on the new Dockerfile/compose file. Can be done with user privileges,
+the makefile provides it:
+
+```
+make build
+make prodbuild
+```
+
+I think we then have to call `docker start <id>` to get it up again.
+
 
 
 # Building container (also locally)
